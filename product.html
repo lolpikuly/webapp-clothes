@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VAULT — товар</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo" onclick="goHome()" style="cursor:pointer">VAULT</div>
+    <nav class="nav"><button class="button" onclick="openCart()">Корзина</button></nav>
+  </header>
+
+  <section class="card">
+    <button class="button" onclick="goBack()">← Назад</button>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:12px">
+      <div style="flex:1;min-width:260px">
+        <img id="pimg" src="" style="width:100%;height:360px;object-fit:cover;border-radius:12px;background:#060606">
+      </div>
+      <div style="flex:1;min-width:260px" class="product">
+        <h2 id="pname">Название товара</h2>
+        <div class="price" id="pprice">0 ₽</div>
+        <p class="small" id="pdesc">Описание</p>
+
+        <div style="margin-top:10px;" class="card">
+          <label class="small">Город для расчёта доставки</label><br>
+          <input id="city" class="input" placeholder="Например: Москва">
+          <div style="margin-top:8px" class="controls">
+            <button class="button" onclick="calcShipping()">Рассчитать доставку</button>
+            <div id="shipResult" class="small"> — </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="card">
+          <div class="small">Итог</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>Цена товара</div><div id="sumItem">0 ₽</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+            <div>Доставка СДЕК</div><div id="sumShip">—</div>
+          </div>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700">
+            <div>Итого</div><div id="total">0 ₽</div>
+          </div>
+          <div style="margin-top:12px"><button class="buy" onclick="checkout()">Купить</button></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <div class="footer">VAULT — минималистичный магазин одежды</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

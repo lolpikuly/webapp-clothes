@@ -1,149 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vault WebApp</title>
-<style>
-body { margin:0; font-family: 'Arial', sans-serif; background-color: #000; color: #fff; }
-a { color: #9b59b6; text-decoration: none; }
-header { padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 10px; }
-.category, .product { background-color: #111; padding: 15px; border-radius: 10px; min-width: 120px; text-align: center; cursor: pointer; transition: 0.2s; }
-.category:hover, .product:hover { background-color: #222; }
-.container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; }
-.product img { width: 150px; height: 150px; object-fit: cover; border-radius: 10px; }
-.btn { padding: 10px 20px; background-color: #9b59b6; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: 0.2s; }
-.btn:hover { background-color: #7d3fa3; }
-.product-info { margin-top: 10px; }
-.form-group { margin: 10px 0; }
-input, select { padding: 8px; border-radius: 5px; border: none; }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAULT — главная</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="container">
+  <header class="header">
+    <div class="logo">VAULT</div>
+    <nav class="nav"><button class="button" onclick="openCart()">Корзина</button></nav>
+  </header>
 
-<!-- Главная / Категории -->
-<div id="page-home">
-    <header>VAULT</header>
-    <nav>
-        <div class="category" onclick="openCategory('Мужские')">Мужские</div>
-        <div class="category" onclick="openCategory('Женские')">Женские</div>
-        <div class="category" onclick="openCategory('Кроссовки')">Кроссовки</div>
-        <div class="category" onclick="openCategory('Кофты')">Кофты</div>
-        <div class="category" onclick="openCategory('Штаны')">Штаны</div>
-        <div class="category" onclick="openCategory('Аксессуары')">Аксессуары</div>
-        <div class="category" onclick="openCategory('Головные уборы')">Головные уборы</div>
-        <div class="category" onclick="openCategory('Рюкзаки / Сумки')">Рюкзаки / Сумки</div>
-        <div class="category" onclick="openCategory('Спортивная одежда')">Спортивная одежда</div>
-        <div class="category" onclick="openCategory('Новинки / Хиты')">Новинки / Хиты</div>
-    </nav>
+  <section class="card">
+    <h2>Категории</h2>
+    <p class="small">Минимализм • Черный стиль</p>
+    <div class="grid" id="categories"></div>
+  </section>
+
+  <section style="margin-top:18px" class="card">
+    <h3>Популярные товары</h3>
+    <div class="grid" id="products"></div>
+  </section>
+
+  <div class="footer">VAULT — минималистичный магазин одежды</div>
 </div>
-
-<!-- Категория / Товары -->
-<div id="page-category" style="display:none;">
-    <header id="category-title">Категория</header>
-    <div class="container" id="products-list"></div>
-    <div style="text-align:center; margin:20px;"><button class="btn" onclick="goHome()">Назад</button></div>
-</div>
-
-<!-- Страница товара -->
-<div id="page-product" style="display:none; padding:20px;">
-    <header id="product-title">Товар</header>
-    <div style="text-align:center; margin: 20px;">
-        <img id="product-image" src="https://via.placeholder.com/150" alt="Product">
-        <div class="product-info">
-            <p id="product-description">Описание товара</p>
-            <p id="product-price">Цена: 0 ₽</p>
-        </div>
-        <div class="form-group">
-            <label for="city">Выберите город:</label>
-            <input type="text" id="city" placeholder="Введите город">
-        </div>
-        <div class="form-group">
-            <label for="pvz">Выберите ПВЗ:</label>
-            <select id="pvz">
-                <option value="pvz1">ПВЗ 1</option>
-                <option value="pvz2">ПВЗ 2</option>
-            </select>
-        </div>
-        <button class="btn" onclick="buyProduct()">Купить</button>
-    </div>
-    <div style="text-align:center; margin:20px;"><button class="btn" onclick="goBackCategory()">Назад к категории</button></div>
-</div>
-
-<script>
-const productsData = {
-    'Мужские': [
-        {name: 'Футболка', price: 1500, image: 'https://via.placeholder.com/150', description: 'Мужская футболка'},
-        {name: 'Рубашка', price: 2500, image: 'https://via.placeholder.com/150', description: 'Мужская рубашка'}
-    ],
-    'Женские': [
-        {name: 'Платье', price: 3000, image: 'https://via.placeholder.com/150', description: 'Женское платье'}
-    ]
-};
-let currentCategory = '';
-let currentProduct = null;
-function openCategory(category) {
-    currentCategory = category;
-    document.getElementById('page-home').style.display = 'none';
-    document.getElementById('page-category').style.display = 'block';
-    document.getElementById('category-title').innerText = category;
-    const container = document.getElementById('products-list');
-    container.innerHTML = '';
-    const products = productsData[category] || [];
-    products.forEach(prod => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `<img src='${prod.image}'><div>${prod.name}</div><div>${prod.price} ₽</div>`;
-        div.onclick = () => openProduct(prod);
-        container.appendChild(div);
-    });
-}
-function goHome() {
-    document.getElementById('page-category').style.display = 'none';
-    document.getElementById('page-home').style.display = 'block';
-}
-function openProduct(product) {
-    currentProduct = product;
-    document.getElementById('page-category').style.display = 'none';
-    document.getElementById('page-product').style.display = 'block';
-    document.getElementById('product-title').innerText = product.name;
-    document.getElementById('product-description').innerText = product.description;
-    document.getElementById('product-image').src = product.image;
-    updatePrice();
-}
-function goBackCategory() {
-    document.getElementById('page-product').style.display = 'none';
-    document.getElementById('page-category').style.display = 'block';
-}
-function calculateDelivery(city) {
-    let delivery = 400;
-    if(city.toLowerCase() === 'москва') delivery = 300;
-    if(city.toLowerCase() === 'спб') delivery = 250;
-    return delivery;
-}
-function updatePrice() {
-    const city = document.getElementById('city').value;
-    const delivery = calculateDelivery(city);
-    if(currentProduct) {
-        document.getElementById('product-price').innerText = `Цена: ${currentProduct.price + delivery} ₽ (вкл. доставку ${delivery} ₽)`;
-    }
-}
-document.getElementById('city').addEventListener('input', updatePrice);
-document.getElementById('pvz').addEventListener('change', updatePrice);
-function buyProduct() {
-    const city = document.getElementById('city').value;
-    const pvz = document.getElementById('pvz').value;
-    const delivery = calculateDelivery(city);
-    const total = currentProduct.price + delivery;
-    alert(`Заказ принят!
-Товар: ${currentProduct.name}
-Город: ${city}
-ПВЗ: ${pvz}
-Итоговая сумма: ${total} ₽
-Чек самозанятого создан (имитация)`);
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
